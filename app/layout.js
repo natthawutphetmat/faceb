@@ -1,33 +1,30 @@
-export default function RootLayout({ children }) {
+
+import React, { useEffect } from 'react';
+import Script from 'next/script';
+
+const Layout = ({ children }) => {
+  useEffect(() => {
+    window.fbq?.('track', 'PageView');
+  }, []);
+
   return (
-    <html lang='en' suppressHydrationWarning>
-      <Script id='fb-pixel' strategy='afterInteractive'>
-        {`
-          !function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '${process.env.FACEBOOK_PIXEL_ID}');
-          fbq('track', 'PageView');
-        `}
-      </Script>
+    <div>
+      <Script
+        strategy="afterInteractive"
+        src={`https://connect.facebook.net/en_US/fbevents.js`}
+        onLoad={() => {
+          fbq('init', '819900423353826'); 
+        }}
+      />
+      <header>
+        <h1>My Website Header</h1>
+      </header>
+      <main>{children}</main>
+      <footer>
+        <p>© 2024 My Website</p>
+      </footer>
+    </div>
+  );
+};
 
-      <body className={openSans.className}>
-        <noscript>
-          <img
-            height='1'
-            width='1'
-            style='display:none'
-            alt={'facebook pixel no script image'}
-            src='https://www.facebook.com/tr?id=1002246091049642&ev=PageView&noscript=1'
-          />
-        </noscript>
-      </body>
-    </html>
-  )
-
-}
+export default Layout;
